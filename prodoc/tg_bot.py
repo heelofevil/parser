@@ -24,18 +24,20 @@ def telegramm_bot(token):
 
     @bot.message_handler(content_types='text')
     def fed(message):
-        if message.text in "МоскваСанкт-ПетербургЕкатеринбург":
+        if message.text in "Москва Санкт-Петербург Екатеринбург Пермь":
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1, item2 = types.KeyboardButton("УЗИ шеи"),types.KeyboardButton("УЗИ брюшной полости")
             item3, item4 = types.KeyboardButton("УЗИ малого таза"),types.KeyboardButton("УЗИ половой системы")
-            markup.add(item1, item2, item3, item4)
+            item5 = types.KeyboardButton("Назад")
+            markup.add(item1, item2, item3, item4, item5)
             bot.send_message(message.chat.id, 'Выбери область узи', reply_markup=markup)
 
                 
         if message.text in "УЗИ шеи":
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1, item2 = types.KeyboardButton("паращитовидных желез"), types.KeyboardButton("щитовидной железы")
-            markup.add(item1, item2)
+            item3 = types.KeyboardButton("Назад")
+            markup.add(item1, item2, item3)
             bot.send_message(message.chat.id, 'Выберите вид узи', reply_markup=markup)
 
 
@@ -43,20 +45,23 @@ def telegramm_bot(token):
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1, item2, item3 = types.KeyboardButton("желудка"), types.KeyboardButton("желчного пузыря"), types.KeyboardButton("печени")
             item4, item5 = types.KeyboardButton("почек"), types.KeyboardButton("обзорное всех органов")
-            markup.add(item1, item2, item3, item4, item5)
+            item6 = types.KeyboardButton("Назад")
+            markup.add(item1, item2, item3, item4, item5, item6)
             bot.send_message(message.chat.id, 'Выберите вид узи', reply_markup=markup)
 
         if message.text in "УЗИ малого таза":
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1, item2 = types.KeyboardButton("мочевого пузыря"), types.KeyboardButton("УЗИ м.п. с определением остаточной мочи")
-            markup.add(item1, item2)
+            item3 = types.KeyboardButton("Назад")
+            markup.add(item1, item2, item3)
             bot.send_message(message.chat.id, 'Выберите вид узи', reply_markup=markup)
 
         if message.text in "УЗИ половой системы":
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             item1, item2 = types.KeyboardButton("матки и придатков"), types.KeyboardButton("молочных желез")
             item3, item4 = types.KeyboardButton("мошонки"), types.KeyboardButton("предстательной железы")
-            markup.add(item1, item2,item3, item4)
+            item5 = types.KeyboardButton("Назад")
+            markup.add(item1, item2,item3, item4, item5)
             bot.send_message(message.chat.id, 'Выберите вид узи', reply_markup=markup)
 
 
@@ -70,10 +75,13 @@ def telegramm_bot(token):
             cult.append(4)
         elif message.text in 'обзорное всех органов':
             cult.append(5)
+        elif message.text in "Назад":
+            start_bot(message)
+            cult.clear()
         if len(cult) == 3:
             status = parsing_prodoc(*cult)
             for i, k in status.items():
-                bot.send_message(message.chat.id, f'Учреждение: {k[0]} {k[1]} цена {k[2]} \n[Cсылка для записи]({k[3]})', parse_mode='Markdown')
+                bot.send_message(message.chat.id, f'{k[0]} {k[1]} цена {k[2]} \n\n[Cсылка для записи]({k[3]})', parse_mode='Markdown')
 
 
 
